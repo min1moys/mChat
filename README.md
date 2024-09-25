@@ -3,8 +3,6 @@
 
 This plugin adds local and global chat, also roleplay commands like /me.
 
-![](logo.png)
-
 ## Requirements
 
 - Java 17+
