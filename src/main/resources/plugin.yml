@@ -19,3 +19,6 @@ permissions:
 commands:
   mchat:
     description: Used to reload configuration
+  msg:
+    description: Личное сообщение другому игроку
+    usage: /msg <игрок> <сообщение>

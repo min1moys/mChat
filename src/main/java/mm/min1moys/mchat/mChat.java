@@ -1,9 +1,11 @@
 package mm.min1moys.mchat;
 
+import mm.min1moys.mchat.listener.ChatClick;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.plugin.PluginManager;
 import mm.min1moys.mchat.command.Command;
 import mm.min1moys.mchat.command.TabComplete;
 import mm.min1moys.mchat.configuration.Config;
@@ -11,6 +13,8 @@ import mm.min1moys.mchat.handler.ChatHandler;
 import mm.min1moys.mchat.listener.PlayerChat;
 import mm.min1moys.mchat.listener.PlayerJoin;
 import mm.min1moys.mchat.listener.PlayerQuit;
+import mm.min1moys.mchat.command.PrivateMessage;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 import java.util.Objects;
 
@@ -35,9 +39,12 @@ public final class mChat extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerJoin(ChatHandler.getInstance()), this);
         getServer().getPluginManager().registerEvents(new PlayerQuit(ChatHandler.getInstance()), this);
 
+        // Регистрация команды /mchat
         Objects.requireNonNull(getCommand("mchat")).setExecutor(new Command(ChatHandler.getInstance()));
         Objects.requireNonNull(getCommand("mchat")).setTabCompleter(new TabComplete());
 
+        // Регистрация команды /msg и события клика по нику
+        Objects.requireNonNull(getCommand("msg")).setExecutor(new PrivateMessage());        getServer().getPluginManager().registerEvents(new ChatClick(), this);
         if (!setupPAPI()) {
             getLogger().warning("PlaceholderAPI not found, functionality will be missing.");
         }
@@ -45,6 +52,11 @@ public final class mChat extends JavaPlugin {
         if (!setupVault()) {
             getLogger().warning("Vault not found, functionality will be missing.");
         }
+    }
+
+    @Override
+    public void onDisable() {
+        // Логика при выключении плагина
     }
 
     private boolean setupPAPI() {
